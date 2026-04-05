@@ -1,0 +1,66 @@
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { API_URL } from "../config";
+import StoreCard from "./StoreCard";
+
+const FeaturedStores = () => {
+  const [stores, setStores] = useState([]);
+
+  useEffect(() => {
+    fetch(`${API_URL}/api/stores`)
+      .then((res) => res.json())
+      .then((data) => {
+        const items = Array.isArray(data) ? data : [];
+        setStores(items.slice(0, 12));
+      })
+      .catch((err) => {
+        console.error("Failed to fetch stores:", err);
+        setStores([]); // Set empty array on error
+      });
+  }, []);
+
+  return (
+    <section className="container mx-auto px-4 py-20">
+      <div className="flex justify-between items-end mb-10">
+        <div>
+          <div className="section-tag">🏪 Top Retailers</div>
+          <h2 className="text-3xl md:text-4xl font-bold text-textMain">
+            Featured Stores
+          </h2>
+          <p className="text-gray-500 mt-1">
+            Browse deals from the world's best brands
+          </p>
+        </div>
+        <Link
+          to="/stores"
+          className="hidden md:inline-flex items-center gap-2 text-primary font-semibold hover:gap-3 transition-all group"
+        >
+          View All Stores
+          <span className="group-hover:translate-x-1 transition-transform">
+            →
+          </span>
+        </Link>
+      </div>
+
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-5">
+        {stores.map((store) => (
+          <Link
+            key={store.id}
+            to={`/store/${store.name.toLowerCase().replace(/\s+/g, "-")}`}
+            className="card-hover"
+          >
+            <StoreCard store={store} />
+          </Link>
+        ))}
+      </div>
+
+      <div className="text-center mt-8 md:hidden">
+        <Link to="/stores" className="text-primary font-semibold">
+          View All Stores →
+        </Link>
+      </div>
+    </section>
+  );
+};
+
+export default FeaturedStores;
