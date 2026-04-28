@@ -1,8 +1,8 @@
 {
     "rewrites": [
         {
-            "source": "/lb_check.txt",
-            "destination": "/lb_check.txt"
+            "source": "/lb_check_txt.txt",
+            "destination": "/lb_check_txt.txt"
         },
         {
             "source": "/(.*)",
